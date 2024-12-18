@@ -1,0 +1,276 @@
+
+   .todos-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: sans-serif;
+  }
+  
+  .todos-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .todos-header h1 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .status-filter {
+    display: flex;
+    align-items: center;
+  }
+  
+  .status-select {
+    margin-left: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .create-todo-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .create-todo-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .todos-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .todo-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .todo-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .todo-status {
+    display: flex;
+    align-items: center;
+  }
+  
+  .status-indicator {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .status-indicator.completed {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .status-indicator.pending {
+    background-color: #FFA500;
+    color: white;
+  }
+  
+  .button-small {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination-btn:hover {
+    background-color: #007B9A;
+  }
+  
+  .pagination-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .page-indicator {
+    margin: 0 15px;
+    font-size: 16px;
+  }
+  
+  .todo-details {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .edit-title-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .todo-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+  }
+  
+  .todo-actions .button {
+    margin-right: 10px;
+  }
+  
+  .edit-btn, .save-btn, .toggle-status-btn, .delete-btn, .back-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-btn {
+    background-color: #FFA500;
+    color: white;
+  }
+  
+  .save-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .toggle-status-btn {
+    background-color: #008CBA;
+    color: white;
+  }
+  
+  .delete-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .back-btn {
+    background-color: #555555;
+    color: white;
+  }
+  
+  .error-message, .loading-message {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+  
+  .error-message {
+    color: #f44336;
+  }
+  
+  .loading-message {
+    color: #008CBA;
+  }
+  /* .text {
+    animation: text-animation 2s infinite linear 1s;
+  }
+  @keyframes text-animation {
+      0% {
+          transform: rotateY(0deg);
+      }
+      50% {
+          transform: rotateY(100deg);
+      }
+      100% {
+          transform: rotateY(200deg);
+      }
+  } */
+  .text span {
+    font-size: 1.7rem;
+    transform-style: preserve-3d;
+  }
+  .text span:nth-child(even){
+    color: rgb(97, 93, 93);
+   
+  }
+  .text span:nth-child(1){
+    animation: text-animation 5s infinite linear 0s; 
+  }
+  .text span:nth-child(2){
+    animation: text-animation 5s infinite linear 0.5s;
+  }
+  .text span:nth-child(3){
+    animation: text-animation 5s infinite linear 1s;
+  }
+  .text span:nth-child(4){
+    animation: text-animation 5s infinite linear 1.5s;
+  }
+  .text span:nth-child(5){
+    animation: text-animation 5s infinite linear 2s;
+  }
+  .text span:nth-child(6){
+    animation: text-animation 5s infinite linear 2.5s;
+  }
+  .text span:nth-child(7){
+    animation: text-animation 5s infinite linear 3s;
+  }
+  .text span:nth-child(8){
+    animation: text-animation 5s infinite linear 3.5s;
+  }
+  @keyframes text-animation {
+    0% {
+      transform: rotateY(0deg);
+    }
+    50% {
+      transform: rotateY(180deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }

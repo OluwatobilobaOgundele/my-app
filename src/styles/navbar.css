@@ -1,0 +1,11 @@
+.box {
+        clip-path: polygon(0 0,100% 0,100% calc(100% - 4rem),calc(100% - 4rem) calc(100% - 4rem),calc(100% - 4rem) 100%,4rem 100%,4rem calc(100% - 4rem),0 calc(100% - 4rem));
+      
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  @media (max-width: 450px) {
+    .listing {
+        flex-direction: column;
+    }
+  }
