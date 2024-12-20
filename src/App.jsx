@@ -3,16 +3,18 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import ErrorBoundary from "./components/error_boundary";
 import LoadingSpinner from "./components/loading";
+import "./App.css";
 
-const Home = lazy(() => import("./routes/home"));
-const Todos = lazy(() => import("./routes/todos"));
-const TodoDetails = lazy(() => import("./routes/todo_page"));
-const NotFound = lazy(() => import("./routes/not_found"));
-const ErrorTest = lazy(() => import("./routes/error_test"));
+// Update imports to use correct paths and consistent extensions
+const Home = lazy(() => import("./components/Home"));
+const Todos = lazy(() => import("./components/todos"));
+const TodoDetails = lazy(() => import("./components/todo_page"));
+const NotFound = lazy(() => import("./components/not_found"));
+const ErrorTest = lazy(() => import("./components/error_test"));
 
 function App() {
   return (
-    <>
+    <div className="app">
       <Navbar />
       <main className="app-main">
         <ErrorBoundary>
@@ -28,7 +30,7 @@ function App() {
           </Suspense>
         </ErrorBoundary>
       </main>
-    </>
+    </div>
   );
 }
 

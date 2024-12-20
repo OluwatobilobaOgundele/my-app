@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet} from "react-router-dom";
 import { fetchTodos } from "../api";
 import TodoModal from "../components/todo_form";
 import LoadingSpinner from "../components/loading";
@@ -16,7 +16,6 @@ const Todos = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentTodo, setCurrentTodo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: "", type: "" });
 
   const ITEMS_PER_PAGE = 10;
@@ -273,7 +272,7 @@ const fetchPage = useCallback(async (pageNum) => {
             {filteredTodos.length === 0 && <p>No todos found.</p>}
           </>
         )}
-      </div>
+      
 
       <footer className="pagination">
         <button
@@ -294,7 +293,7 @@ const fetchPage = useCallback(async (pageNum) => {
           Next
         </button>
       </footer>
-
+</div>
       <TodoModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
