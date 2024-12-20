@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { fetchTodos } from "../api";
@@ -11,7 +9,7 @@ import Notification from "../components/prompt_message";
 const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(20);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
@@ -21,42 +19,83 @@ const Todos = () => {
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: "", type: "" });
 
+  const ITEMS_PER_PAGE = 10;
+
 const showNotification = (message, type = "success") => {
   setNotification({ message, type });
   setTimeout(() => setNotification({ message: "", type: "" }), 3000); // Auto-hide after 3 seconds
 };
 
+ // Function to get modified API todos from localStorage
+ const getModifiedApiTodos = () => {
+  return JSON.parse(localStorage.getItem("modifiedApiTodos")) || {};
+};
 
-const fetchPage = async (page) => {
+// Function to save modified API todo to localStorage
+const saveModifiedApiTodo = (todo) => {
+  const modifiedTodos = getModifiedApiTodos();
+  modifiedTodos[todo.id] = todo;
+  localStorage.setItem("modifiedApiTodos", JSON.stringify(modifiedTodos));
+}; 
+
+const fetchPage = useCallback(async (pageNum) => {
   setIsLoading(true);
   try {
-    const result = await fetchTodos(page); // Pass the current page number
-    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
-    let allTodos, totalCount;
+    const { data, totalCount } = await fetchTodos(pageNum);
+    const modifiedApiTodos = getModifiedApiTodos();
+    
+    // Apply any modifications to API todos
+    const updatedApiTodos = data.map(todo => {
+      return modifiedApiTodos[todo.id] || todo;
+    });
 
-    if (Array.isArray(result)) {
-      allTodos = [...localTodos, ...result];
-      totalCount = result.length; 
-    } else if (typeof result === 'object' && result !== null) {
-      allTodos = [...localTodos, ...result.data];
-      totalCount = result.totalCount || allTodos.length;
-    } else {
-      throw new Error("Unexpected data format from API");
-    }
-
-    setTodos(allTodos);
-    setTotalPages(Math.ceil(totalCount / 10)); // Assuming 10 todos per page
+    return { apiTodos: updatedApiTodos, totalCount };
   } catch (err) {
     console.error("Error fetching todos:", err);
+    return { apiTodos: [], totalCount: 0 };
   } finally {
     setIsLoading(false);
   }
-};
+}, []);
 
+  const loadTodos = useCallback(async (currentPage) => {
+    const { apiTodos, totalCount } = await fetchPage(currentPage);
+    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+    
+    // Calculate total pages including both API and local todos
+    const totalItems = totalCount + localTodos.length;
+    const calculatedTotalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    setTotalPages(Math.max(1, calculatedTotalPages));
+
+    // Determine which todos to show based on the current page
+    let allTodos;
+    if (currentPage === 1) {
+      // First page shows local todos first, then API todos to fill up to 10 items
+      const localTodosForPage = localTodos.slice(0, ITEMS_PER_PAGE);
+      const remainingSpace = ITEMS_PER_PAGE - localTodosForPage.length;
+      const apiTodosForPage = apiTodos.slice(0, remainingSpace);
+      allTodos = [...localTodosForPage, ...apiTodosForPage];
+    } else {
+      // Calculate offset for API todos based on local todos count
+      const localTodosPages = Math.ceil(localTodos.length / ITEMS_PER_PAGE);
+      
+      if (currentPage <= localTodosPages) {
+        // Still showing local todos
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        allTodos = localTodos.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+      } else {
+        // Showing API todos
+        const apiPage = currentPage - localTodosPages;
+        allTodos = apiTodos;
+      }
+    }
+
+    setTodos(allTodos);
+  }, [fetchPage]);
 
   useEffect(() => {
-    fetchPage(page);
-  }, [page]);
+    loadTodos(page);
+  }, [page, loadTodos]);
 
   useEffect(() => {
     let result = todos;
@@ -78,51 +117,91 @@ const fetchPage = async (page) => {
 
   const handleCreate = (newTodo) => {
     newTodo.id = `local-${Date.now()}`;
-    const updatedTodos = [newTodo, ...todos];
-    setTodos(updatedTodos);
-
+    
+    // Add the new todo to localStorage
     const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
     const updatedLocalTodos = [newTodo, ...localTodos];
     localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+
+    // If we're on page 1, update the current view
+    if (page === 1) {
+      setTodos(prev => [newTodo, ...prev].slice(0, ITEMS_PER_PAGE));
+    } else {
+      // Navigate to page 1 to see the new todo
+      setPage(1);
+    }
+
     showNotification("Todo created successfully!", "success");
   };
 
   const handleEdit = (updatedTodo) => {
+    // Update the todos state
     const updatedTodos = todos.map((todo) =>
       todo.id === updatedTodo.id ? updatedTodo : todo
     );
     setTodos(updatedTodos);
 
-    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
-    const updatedLocalTodos = localTodos.map((todo) =>
-      todo.id === updatedTodo.id ? updatedTodo : todo
-    );
-    localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+    if (updatedTodo.id.startsWith('local-')) {
+      // Handle local todo
+      const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+      const updatedLocalTodos = localTodos.map((todo) =>
+        todo.id === updatedTodo.id ? updatedTodo : todo
+      );
+      localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+    } else {
+      // Handle API todo
+      saveModifiedApiTodo(updatedTodo);
+    }
+
     showNotification("Todo updated successfully!", "success");
   };
 
-  const handleDelete = (id) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
+  const handleDelete = async (id) => {
+    if (id.startsWith('local-')) {
+      // Handle local todo deletion
+      const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+      const updatedLocalTodos = localTodos.filter((todo) => todo.id !== id);
+      localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+    } else {
+      // Handle API todo deletion
+      const modifiedApiTodos = getModifiedApiTodos();
+      modifiedApiTodos[id] = { ...modifiedApiTodos[id], deleted: true };
+      localStorage.setItem("modifiedApiTodos", JSON.stringify(modifiedApiTodos));
+    }
 
-    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
-    const updatedLocalTodos = localTodos.filter((todo) => todo.id !== id);
-    localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+    // Reload current page
+    await loadTodos(page);
     showNotification("Todo deleted successfully!", "success");
   };
 
   const toggleStatus = (id) => {
+    const todoToToggle = todos.find(todo => todo.id === id);
+    if (!todoToToggle) return;
+
+    const updatedTodo = { 
+      ...todoToToggle, 
+      completed: !todoToToggle.completed 
+    };
+
+    if (id.startsWith('local-')) {
+      // Handle local todo
+      const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+      const updatedLocalTodos = localTodos.map((todo) =>
+        todo.id === id ? updatedTodo : todo
+      );
+      localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
+    } else {
+      // Handle API todo
+      saveModifiedApiTodo(updatedTodo);
+    }
+
+    // Update the todos state
     const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      todo.id === id ? updatedTodo : todo
     );
     setTodos(updatedTodos);
-
-    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
-    const updatedLocalTodos = localTodos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
   };
+
 
   return (
     <section className="todos-container">
@@ -135,7 +214,8 @@ const fetchPage = async (page) => {
          <span> L</span>
           <span>i</span>
           <span>s</span>
-          <span>t</span></h1>
+          <span>t</span>
+          </h1>
         <div className="filter-container">
           <input
             type="text"

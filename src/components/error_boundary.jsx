@@ -39,7 +39,7 @@ const ErrorFallback = ({ onReset }) => {
         Reload Page
       </button>
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("..")}
         style={{ ...styles.button, marginLeft: "10px" }}
       >
         Go to Home

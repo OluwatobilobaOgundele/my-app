@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { fetchTodoDetails } from "../api";
 import "../styles/todo_information.css"
+import LoadingSpinner from "../components/loading";
 
 const TodoDetails = () => {
   const [todo, setTodo] = useState(null);
@@ -48,7 +49,7 @@ const TodoDetails = () => {
 
   const handleDeleteAndNavigate = () => {
     handleDelete(id);
-    navigate("..");
+    navigate("..", { replace: true });
   };
 
   const handleSaveEdit = () => {
@@ -56,16 +57,26 @@ const TodoDetails = () => {
     handleEdit(updatedTodo);
     setTodo(updatedTodo);
     setIsEditing(false);
+
+
+    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+    const updatedLocalTodos = localTodos.map(t => t.id === updatedTodo.id ? updatedTodo : t);
+    localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
   };
 
   const handleToggleStatus = () => {
     const updatedTodo = { ...todo, completed: !todo.completed };
     toggleStatus(id);
     setTodo(updatedTodo);
+
+    const localTodos = JSON.parse(localStorage.getItem("localTodos")) || [];
+    const updatedLocalTodos = localTodos.map(t => t.id === updatedTodo.id ? updatedTodo : t);
+    localStorage.setItem("localTodos", JSON.stringify(updatedLocalTodos));
   };
+  
 
   if (error) return <p>{error}</p>;
-  if (!todo) return <p>Loading...</p>;
+  if (!todo) return <LoadingSpinner/>;
 
   return (
     <section className="todo-details">
