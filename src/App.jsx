@@ -4,7 +4,7 @@ import Navbar from "./components/navbar";
 import ErrorBoundary from "./components/error_boundary";
 import LoadingSpinner from "./components/loading";
 
-const Home = lazy(() => import("./routes/Home"));
+const Home = lazy(() => import("./routes/home"));
 const Todos = lazy(() => import("./routes/todos"));
 const TodoDetails = lazy(() => import("./routes/todo_page"));
 const NotFound = lazy(() => import("./routes/not_found"));
