@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, Outlet} from "react-router-dom";
+import { Link, Outlet, useParams} from "react-router-dom";
 import { fetchTodos } from "../api";
-import TodoModal from "../components/todo_form";
+import TaskModal from "../components/todo_form";
 import LoadingSpinner from "../components/loading";
 import "../styles/todos.css";
 import Notification from "../components/prompt_message";
@@ -17,6 +17,7 @@ const Todos = () => {
   const [currentTodo, setCurrentTodo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState({ message: "", type: "" });
+  const { id } = useParams();
 
   const ITEMS_PER_PAGE = 10;
 
@@ -203,7 +204,7 @@ const fetchPage = useCallback(async (pageNum) => {
 
 
   return (
-    <section className="todos-container">
+    <section className={`todos-container ${id ? "details-active" : ""}`}>
       <header className="todos-header">
         <h1 className="text"><span>T</span>
           <span>a</span>
@@ -294,7 +295,7 @@ const fetchPage = useCallback(async (pageNum) => {
         </button>
       </footer>
 </div>
-      <TodoModal
+      <TaskModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onSubmit={(newTodo) => {

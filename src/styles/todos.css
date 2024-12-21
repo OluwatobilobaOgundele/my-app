@@ -218,7 +218,8 @@
     color: #008CBA;
   }
   /* .text {
-    animation: text-animation 2s infinite linear 1s;
+    animation: text-animation 10s infinite linear 1s;
+    transform-style: preserve-3d;
   }
   @keyframes text-animation {
       0% {
@@ -234,12 +235,13 @@
   .text span {
     font-size: 1.7rem;
     transform-style: preserve-3d;
+    animation: text-animation 10s infinite linear 1s;
   }
   .text span:nth-child(even){
-    color: rgb(97, 93, 93);
-   
+    color: #615d5d;
+    animation: text-animation 10s infinite linear 1s;
   }
-  .text span:nth-child(1){
+  /* .text span:nth-child(1){
     animation: text-animation 5s infinite linear 0s; 
   }
   .text span:nth-child(2){
@@ -262,15 +264,15 @@
   }
   .text span:nth-child(8){
     animation: text-animation 5s infinite linear 3.5s;
-  }
+  } */
   @keyframes text-animation {
     0% {
       transform: rotateY(0deg);
     }
     50% {
-      transform: rotateY(180deg);
+      transform: rotateY(100deg);
     }
     100% {
-      transform: rotateY(360deg);
+      transform: rotateY(200deg);
     }
   }

@@ -1,0 +1,58 @@
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 500px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error-container h1 {
+    font-size: 2rem;
+    color: #333333;
+    margin-bottom: 10px;
+  }
+  
+  .error-container p {
+    font-size: 1.2rem;
+    color: #555555;
+    margin-bottom: 20px;
+  }
+  
+  .error-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .error-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .error-button:hover {
+    background-color: #0056b3;
+  }
+  
+  @media (max-width: 768px) {
+    .error-container {
+      padding: 15px;
+    }
+  
+    .error-button {
+      width: 100%; /* Make buttons full-width on small screens */
+    }
+  }
+  

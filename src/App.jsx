@@ -5,7 +5,6 @@ import ErrorBoundary from "./components/error_boundary";
 import LoadingSpinner from "./components/loading";
 import "./App.css";
 
-// Update imports to use correct paths and consistent extensions
 const Home = lazy(() => import("./components/Home"));
 const Todos = lazy(() => import("./components/todos"));
 const TodoDetails = lazy(() => import("./components/todo_page"));

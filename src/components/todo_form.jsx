@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/modal.css";
 
-const TodoModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
+const TaskModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
   const [title, setTitle] = useState(initialData.title || "");
   const [completed, setCompleted] = useState(initialData.completed || false);
 
@@ -43,4 +43,4 @@ const TodoModal = ({ isOpen, onClose, onSubmit, initialData = {} }) => {
   );
 };
 
-export default TodoModal;
+export default TaskModal;

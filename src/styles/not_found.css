@@ -1,0 +1,22 @@
+.containerr {
+    margin: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #f8f9fa;
+    color: #444;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    color: #545454;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    font-size: 1.2rem;
+    color: #ff6347;
+  }
+  

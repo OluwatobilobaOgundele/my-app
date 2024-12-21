@@ -15,16 +15,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  max-width: 1200px;
   margin: 0 auto;
+  max-width: 1200px;
 }
 
-/* Main todos list */
-.todos-content {
+.todos-container.details-active .todos-content {
   grid-column: 1;
 }
 
-/* Nested route (todo details) */
+.todos-content, .todos-header {
+  grid-column: span 2;
+}
+
 .todo-details {
   grid-column: 2;
   background: white;
@@ -45,5 +47,8 @@
     grid-column: 1;
     position: static;
   }
-}
 
+  /* .todos-container.details-active .todos-content {
+    display: none;
+  } */
+}
